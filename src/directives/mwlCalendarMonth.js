@@ -15,11 +15,11 @@ angular
       vm.openRowIndex = null;
       vm.openDayIndex = null;
 
-      if (vm.cellIsOpen && vm.view && vm.weekDays) {
+      if (vm.cellIsOpen && vm.view) {
         vm.view.forEach(function(day, dayIndex) {
           if (moment(vm.viewDate).startOf('day').isSame(day.date)) {
             vm.openDayIndex = dayIndex;
-            vm.openRowIndex = Math.floor(dayIndex / vm.weekDays.length);
+            vm.openRowIndex = Math.floor(dayIndex / 7);
           }
         });
       }
@@ -27,9 +27,9 @@ angular
 
     $scope.$on('calendar.refreshView', function() {
 
-      vm.weekDays = calendarHelper.getWeekDayNames(vm.excludedDays);
+      vm.weekDays = calendarHelper.getWeekDayNames();
 
-      var monthView = calendarHelper.getMonthView(vm.events, vm.viewDate, vm.cellModifier, vm.excludedDays);
+      var monthView = calendarHelper.getMonthView(vm.events, vm.viewDate, vm.cellModifier);
       vm.view = monthView.days;
       vm.monthOffsets = monthView.rowOffsets;
 
@@ -68,7 +68,7 @@ angular
           vm.cellIsOpen = false;
         } else {
           vm.openDayIndex = dayIndex;
-          vm.openRowIndex = Math.floor(dayIndex / vm.weekDays.length);
+          vm.openRowIndex = Math.floor(dayIndex / 7);
           vm.cellIsOpen = true;
         }
       }
@@ -133,16 +133,14 @@ angular
     };
 
     vm.onDragSelectEnd = function(day) {
-      if (vm.dateRangeSelect) {
-        vm.dateRangeSelect.endDate = day.date;
-        if (vm.dateRangeSelect.endDate > vm.dateRangeSelect.startDate) {
-          vm.onDateRangeSelect({
-            calendarRangeStartDate: vm.dateRangeSelect.startDate.clone().startOf('day').toDate(),
-            calendarRangeEndDate: vm.dateRangeSelect.endDate.clone().endOf('day').toDate()
-          });
-        }
-        delete vm.dateRangeSelect;
+      vm.dateRangeSelect.endDate = day.date;
+      if (vm.dateRangeSelect.endDate > vm.dateRangeSelect.startDate) {
+        vm.onDateRangeSelect({
+          calendarRangeStartDate: vm.dateRangeSelect.startDate.clone().startOf('day').toDate(),
+          calendarRangeEndDate: vm.dateRangeSelect.endDate.clone().endOf('day').toDate()
+        });
       }
+      delete vm.dateRangeSelect;
     };
 
     vm.$onInit = function() {
@@ -170,7 +168,6 @@ angular
       scope: {
         events: '=',
         viewDate: '=',
-        excludedDays: '=',
         onEventClick: '=',
         onEventTimesChanged: '=',
         onDateRangeSelect: '=',

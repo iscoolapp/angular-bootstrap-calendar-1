@@ -6,7 +6,6 @@
     class="pull-left event"
     ng-class="event.cssClass"
     ng-style="{backgroundColor: event.color.primary}"
-    ng-mousedown="$event.stopPropagation()"
     ng-mouseenter="vm.highlightEvent(event, true)"
     ng-mouseleave="vm.highlightEvent(event, false)"
     tooltip-append-to-body="true"

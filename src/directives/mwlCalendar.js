@@ -38,7 +38,6 @@ angular
       }
 
       vm.events = vm.events || [];
-      vm.excludedDays = vm.excludedDays || [];
 
       var previousDate = moment(vm.viewDate);
       var previousView = vm.view;
@@ -138,7 +137,6 @@ angular
         viewDate: '=',
         cellIsOpen: '=?',
         cellAutoOpenDisabled: '=?',
-        excludedDays: '=?',
         slideBoxDisabled: '=?',
         customTemplateUrls: '=?',
         draggableAutoScroll: '=?',
@@ -149,7 +147,6 @@ angular
         onViewChangeClick: '&',
         cellModifier: '&',
         dayViewStart: '@',
-        dayViewSegmentSize: '@',
         dayViewEnd: '@',
         dayViewSplit: '@',
         dayViewEventChunkSize: '@',

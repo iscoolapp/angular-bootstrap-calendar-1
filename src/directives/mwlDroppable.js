@@ -11,7 +11,6 @@ angular
     }
 
     var DROP_ACTIVE_CLASS = $attrs.dropActiveClass || 'drop-active';
-    var INTERACT_OVERLAP_TYPE = $attrs.dropOverlap || 'pointer';
 
     interact($element[0]).dropzone({
       ondragenter: function(event) {
@@ -28,8 +27,7 @@ angular
           $parse($attrs.onDrop)($scope, {dropData: event.relatedTarget.dropData});
           $scope.$apply();
         }
-      },
-      overlap: INTERACT_OVERLAP_TYPE
+      }
     });
 
     $scope.$on('$destroy', function() {

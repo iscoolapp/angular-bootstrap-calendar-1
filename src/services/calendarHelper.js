@@ -94,17 +94,12 @@ angular
       }).length;
     }
 
-    function getWeekDayNames(excluded) {
-      var weekdays = [0, 1, 2, 3, 4, 5, 6]
-      .filter(function(wd) {
-        return !(excluded || []).some(function(ex) {
-          return ex === wd;
-        });
-      })
-      .map(function(i) {
-        return formatDate(moment().weekday(i), calendarConfig.dateFormats.weekDay);
-      });
-
+    function getWeekDayNames() {
+      var weekdays = [];
+      var count = 0;
+      while (count < 7) {
+        weekdays.push(formatDate(moment().weekday(count++), calendarConfig.dateFormats.weekDay));
+      }
       return weekdays;
     }
 
@@ -144,7 +139,7 @@ angular
       return event;
     }
 
-    function getMonthView(events, viewDate, cellModifier, excluded) {
+    function getMonthView(events, viewDate, cellModifier) {
 
       // hack required to work with the calendar-utils api
       events.forEach(function(event) {
@@ -158,7 +153,6 @@ angular
       var view = calendarUtils.getMonthView({
         events: events,
         viewDate: viewDate,
-        excluded: excluded,
         weekStartsOn: moment().startOf('week').day()
       });
 
@@ -183,11 +177,10 @@ angular
 
     }
 
-    function getWeekView(events, viewDate, excluded) {
+    function getWeekView(events, viewDate) {
 
       var days = calendarUtils.getWeekViewHeader({
         viewDate: viewDate,
-        excluded: excluded,
         weekStartsOn: moment().startOf('week').day()
       }).map(function(day) {
         day.date = moment(day.date);
@@ -202,7 +195,6 @@ angular
       var eventRows = calendarUtils.getWeekView({
         viewDate: viewDate,
         weekStartsOn: moment().startOf('week').day(),
-        excluded: excluded,
         events: filterEventsInPeriod(events, startOfWeek, endOfWeek).map(function(event) {
 
           var weekViewStart = moment(startOfWeek).startOf('day');
@@ -223,7 +215,7 @@ angular
 
           return calendarUtilsEvent;
         })
-      }).eventRows.map(function(eventRow) {
+      }).map(function(eventRow) {
 
         eventRow.row = eventRow.row.map(function(rowEvent) {
           rowEvent.event = rowEvent.event.originalEvent;
@@ -238,7 +230,7 @@ angular
 
     }
 
-    function getDayView(events, viewDate, dayViewStart, dayViewEnd, dayViewSplit, dayViewEventWidth, dayViewSegmentSize) {
+    function getDayView(events, viewDate, dayViewStart, dayViewEnd, dayViewSplit, dayViewEventWidth) {
 
       var dayStart = (dayViewStart || '00:00').split(':');
       var dayEnd = (dayViewEnd || '23:59').split(':');
@@ -262,7 +254,7 @@ angular
           minute: dayEnd[1]
         },
         eventWidth: dayViewEventWidth ? +dayViewEventWidth : 150,
-        segmentHeight: dayViewSegmentSize || 30
+        segmentHeight: 30
       });
 
       // remove hack to work with new event API
@@ -316,10 +308,10 @@ angular
       return weekView;
     }
 
-    function getDayViewHeight(dayViewStart, dayViewEnd, dayViewSplit, dayViewSegmentSize) {
+    function getDayViewHeight(dayViewStart, dayViewEnd, dayViewSplit) {
       var dayViewStartM = moment(dayViewStart || '00:00', 'HH:mm');
       var dayViewEndM = moment(dayViewEnd || '23:59', 'HH:mm');
-      var hourHeight = (60 / dayViewSplit) * (dayViewSegmentSize || 30);
+      var hourHeight = (60 / dayViewSplit) * 30;
       return ((dayViewEndM.diff(dayViewStartM, 'minutes') / 60) * hourHeight) + 3;
     }
 

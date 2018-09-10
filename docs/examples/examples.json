@@ -38,9 +38,6 @@
   "key": "day-view-start-end",
   "label": "Day view start / end time"
 }, {
-  "key": "exclude-weekdays",
-  "label": "Exclude days"
-}, {
   "key": "day-view-split",
   "label": "Day view minute split"
 }, {
@@ -79,7 +76,4 @@
 }, {
   "key": "disable-tooltips",
   "label": "Disable tooltips"
-}, {
-  "key": "day-view-segment-size",
-  "label": "Custom hour segment size in day view"
 }]
